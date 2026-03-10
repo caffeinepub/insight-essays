@@ -1,0 +1,127 @@
+@font-face {
+  font-family: "Fraunces";
+  src: url("/assets/fonts/Fraunces.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "General Sans";
+  src: url("/assets/fonts/GeneralSans.woff2") format("woff2");
+  font-weight: 200 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Background: warm off-white */
+    --background: 0.98 0.004 90;
+    /* Foreground: rich near-black */
+    --foreground: 0.13 0.01 285;
+
+    --card: 0.96 0.004 90;
+    --card-foreground: 0.13 0.01 285;
+
+    --popover: 0.98 0.004 90;
+    --popover-foreground: 0.13 0.01 285;
+
+    /* Primary: warm amber */
+    --primary: 0.72 0.14 72;
+    --primary-foreground: 0.13 0.01 285;
+
+    --secondary: 0.94 0.008 90;
+    --secondary-foreground: 0.13 0.01 285;
+
+    --muted: 0.92 0.006 90;
+    --muted-foreground: 0.48 0.02 285;
+
+    --accent: 0.72 0.14 72;
+    --accent-foreground: 0.13 0.01 285;
+
+    --destructive: 0.55 0.22 25;
+    --destructive-foreground: 0.98 0.004 90;
+
+    --border: 0.88 0.008 90;
+    --input: 0.88 0.008 90;
+    --ring: 0.72 0.14 72;
+
+    --radius: 0.25rem;
+
+    --chart-1: 0.72 0.14 72;
+    --chart-2: 0.6 0.12 220;
+    --chart-3: 0.55 0.1 145;
+    --chart-4: 0.65 0.13 30;
+    --chart-5: 0.58 0.11 300;
+
+    --sidebar: 0.96 0.004 90;
+    --sidebar-foreground: 0.13 0.01 285;
+    --sidebar-primary: 0.72 0.14 72;
+    --sidebar-primary-foreground: 0.13 0.01 285;
+    --sidebar-accent: 0.92 0.006 90;
+    --sidebar-accent-foreground: 0.13 0.01 285;
+    --sidebar-border: 0.88 0.008 90;
+    --sidebar-ring: 0.72 0.14 72;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: "kern" 1, "liga" 1;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+  }
+}
+
+@layer utilities {
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .fade-in-delay-1 {
+    transition-delay: 0.1s;
+  }
+  .fade-in-delay-2 {
+    transition-delay: 0.2s;
+  }
+  .fade-in-delay-3 {
+    transition-delay: 0.3s;
+  }
+  .fade-in-delay-4 {
+    transition-delay: 0.4s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fade-in {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+}
