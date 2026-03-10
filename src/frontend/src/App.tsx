@@ -1,5 +1,12 @@
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   ArrowRight,
   BookOpen,
@@ -12,6 +19,7 @@ import {
   Mail,
   MessageSquare,
   Twitter,
+  X,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
@@ -84,6 +92,8 @@ const movies = [
       "A beautiful, peaceful movie that flows without sudden twists or surprises. It follows a man who is perhaps too nice, too innocent — and pays the price socially for it. The world rewards those who can express themselves pragmatically; Forrest is almost too straightforward for his own good, and society reminds him of that. It shows the life of a soldier and many other chapters, all with a calm warmth. The ending is bittersweet — he finally gets the girl, but she dies of what is implied to be HIV. For every sin there is a repayment. Sad, but that's the reality. Good and calm overall.",
   },
 ];
+
+type Movie = (typeof movies)[number];
 
 function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -322,8 +332,104 @@ function SectionHeader({
   );
 }
 
+function MovieReviewDialog({
+  movie,
+  onClose,
+}: {
+  movie: Movie | null;
+  onClose: () => void;
+}) {
+  return (
+    <Dialog open={movie !== null} onOpenChange={(open) => !open && onClose()}>
+      <DialogContent
+        data-ocid="movies.dialog"
+        className="max-w-xl w-full p-0 overflow-hidden rounded-sm gap-0"
+      >
+        {/* Close button */}
+        <button
+          type="button"
+          data-ocid="movies.close_button"
+          onClick={onClose}
+          aria-label="Close review"
+          className="absolute top-4 right-4 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-muted/60 hover:bg-muted text-muted-foreground hover:text-foreground transition-all duration-150"
+        >
+          <X className="h-4 w-4" />
+        </button>
+
+        {movie && (
+          <>
+            {/* Header band */}
+            <div className="bg-foreground text-background px-8 pt-8 pb-7">
+              <DialogHeader>
+                <div className="flex items-center gap-2 mb-3">
+                  <Film className="h-3.5 w-3.5 opacity-50" />
+                  <span className="text-xs font-medium tracking-[0.2em] uppercase opacity-50">
+                    Movie Review
+                  </span>
+                </div>
+                <DialogTitle className="font-display text-2xl sm:text-3xl font-semibold leading-tight tracking-tight text-background">
+                  {movie.title}
+                  {movie.originalTitle && (
+                    <span className="block text-sm font-normal italic opacity-60 mt-1">
+                      {movie.originalTitle}
+                    </span>
+                  )}
+                </DialogTitle>
+              </DialogHeader>
+
+              {/* Metadata row */}
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-5">
+                <span className="text-xs font-medium tracking-widest uppercase opacity-60">
+                  {movie.country} · {movie.year}
+                </span>
+                <span className="text-xs opacity-40">·</span>
+                <span className="text-xs font-medium opacity-60">
+                  {movie.mood}
+                </span>
+              </div>
+
+              {/* Tags */}
+              <div className="flex flex-wrap gap-2 mt-4">
+                {movie.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-[10px] font-medium tracking-wide uppercase px-2.5 py-1 rounded-full border border-background/20 text-background/70"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Body */}
+            <ScrollArea className="max-h-[50vh]">
+              <div className="px-8 py-7">
+                <p className="text-foreground leading-relaxed text-base">
+                  {movie.review}
+                </p>
+
+                {movie.directorNote && (
+                  <div className="mt-6 border-l-2 border-primary pl-4">
+                    <p className="text-xs font-medium tracking-widest uppercase text-primary mb-1">
+                      Director's Note
+                    </p>
+                    <p className="text-sm text-muted-foreground italic">
+                      {movie.directorNote}
+                    </p>
+                  </div>
+                )}
+              </div>
+            </ScrollArea>
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}
+
 function MoviesSection() {
   const ref = useFadeIn();
+  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
 
   return (
     <section id="movies" className="py-24 sm:py-32" ref={ref}>
@@ -367,6 +473,7 @@ function MoviesSection() {
                 <button
                   type="button"
                   data-ocid={`movies.item.${i + 1}.button`}
+                  onClick={() => setSelectedMovie(movie)}
                   className="text-sm font-medium text-foreground group-hover:text-primary flex items-center gap-2 transition-colors duration-150 border-b border-foreground/20 group-hover:border-primary pb-px"
                 >
                   Read Review
@@ -380,6 +487,11 @@ function MoviesSection() {
           ))}
         </div>
       </div>
+
+      <MovieReviewDialog
+        movie={selectedMovie}
+        onClose={() => setSelectedMovie(null)}
+      />
     </section>
   );
 }
