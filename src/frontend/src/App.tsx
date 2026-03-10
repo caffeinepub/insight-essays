@@ -6,11 +6,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   ArrowRight,
   BookOpen,
   Brain,
+  ChevronDown,
   Film,
   Globe,
   Instagram,
@@ -73,9 +73,9 @@ const movies = [
     mood: "Raw Cinema",
     tags: ["Crime", "Drama", "Raw Cinema", "World Cinema"],
     shortDescription:
-      "A classic that didn't get the popular attention it deserved. Set in the favelas of Rio de Janeiro, this film pulls no punches showing young boys swallowed by crime and gang wars.",
+      "A classic that didn't get the popular attention it deserved. A raw Brazilian film showing young boys in Rio's favelas swallowed by crime and gang wars — a reality that is still happening today.",
     review:
-      "A classic that didn't get the popular attention it deserved. Set in the favelas and ghettos of Rio de Janeiro, this film pulls no punches in showing the lives of young boys swallowed by crime and gang wars. They haven't seen much of life — cocaine, football, and maybe death before their 20th birthday. What makes it remarkable is the director's choice to cast real hood members, giving it an authenticity no Hollywood production could replicate. It made me think of what the Bhagavad Gita warns: that being enslaved by our desires gradually robs us of mind, consciousness, and rationality. Their bodies exist — but not quite their minds.",
+      "One of the classic movies, but not quite popular — and of a raw kind. A Brazilian film showcasing the lives of people in the ghettos and favelas of Rio de Janeiro.\n\nI don't remember the names of any character depicted, but that movie was a great experience. And the truth is, what it shows is still happening today. Young boys, kids — all pulled into crimes and gang wars. They haven't seen the good things life has to offer. They believe that's just life: cocaine, football, and maybe death before their 20th birthday.\n\nI enjoy watching this kind of film — it shows the raw reality of people from different parts of the world. I see it as a missed experience I'm getting virtually.\n\nBut arguably, their lives are purposeless, meaningless, and trapped. No real faith, with drugs and guns completely normalised. Cocaine, heroin, opium — these things make people slaves to their desires. As the Bhagavad Gita warns, being enslaved by our desires gradually leads to the loss of mind, consciousness, and rationality. Their bodies may exist, but not their minds.\n\nWhat made the direction remarkable: the director cast real hood members from the favelas to portray the characters — giving it an authenticity and rawness no conventional casting could replicate.",
   },
   {
     id: 2,
@@ -87,9 +87,9 @@ const movies = [
     mood: "75% Humor",
     tags: ["Drama", "Comedy", "Life Story", "Classic"],
     shortDescription:
-      "A beautiful, peaceful movie that flows without sudden twists or surprises. It follows a man perhaps too nice, too innocent — and pays the price socially for it.",
+      "A beautiful, peaceful movie — 75% humor, 15% emotional drama, and 10% reality check. It flows without sudden twists, following a man too nice for his own good and the life he builds because of it.",
     review:
-      "A beautiful, peaceful movie that flows without sudden twists or surprises. It follows a man who is perhaps too nice, too innocent — and pays the price socially for it. The world rewards those who can express themselves pragmatically; Forrest is almost too straightforward for his own good, and society reminds him of that. It shows the life of a soldier and many other chapters, all with a calm warmth. The ending is bittersweet — he finally gets the girl, but she dies of what is implied to be HIV. For every sin there is a repayment. Sad, but that's the reality. Good and calm overall.",
+      "Forrest Gump is a beautiful, peaceful movie — 75% humor, 15% emotional drama, and 10% reality check. It flows without sudden twists or surprises, and that's exactly what makes it work. It's a calm story with a happy ending that just feels good to watch.\n\nThe film follows a man who is perhaps too nice, too innocent for his own good. Society reminds him of that constantly. He faces bullies and social hardships not because he's bad, but because he's straightforwardly simple — almost too honest for a world that rewards pragmatism and self-expression. The lesson is clear: in today's world, those who can express themselves well and think and act pragmatically are the ones who tend to succeed.\n\nThe movie takes you through many chapters of his life — soldier, ping pong champion, shrimp boat captain — all told with the same warm, unhurried pace. He is too nice, and that affects his relationships too. He only manages to settle down and marry at the very end. And then she dies — implied to be HIV, though the film never names it directly. That part is genuinely sad.\n\nBut there is a certain truth to it: for every choice one makes, there is a consequence that follows. She lived freely and paid a price for it. That's not a judgment — it's just the reality the film quietly points to.\n\nGood and calm movie overall. Highly recommended.",
   },
 ];
 
@@ -299,9 +299,27 @@ function HeroSection() {
           </button>
         </div>
 
-        {/* Scroll hint */}
-        <div className="fade-in mt-20 flex flex-col items-center gap-2 text-muted-foreground/40">
-          <div className="w-px h-16 bg-gradient-to-b from-transparent to-muted-foreground/30" />
+        {/* Scroll down button */}
+        <div className="fade-in mt-20 flex flex-col items-center gap-2">
+          <button
+            type="button"
+            data-ocid="hero.scroll_down_button"
+            aria-label="Scroll down"
+            onClick={() =>
+              document
+                .getElementById("movies")
+                ?.scrollIntoView({ behavior: "smooth" })
+            }
+            className="flex flex-col items-center gap-2 text-muted-foreground/50 hover:text-muted-foreground transition-colors duration-200 group"
+          >
+            <span className="text-xs font-medium tracking-widest uppercase">
+              Scroll
+            </span>
+            <div className="w-px h-10 bg-gradient-to-b from-muted-foreground/30 to-transparent" />
+            <div className="w-6 h-6 rounded-full border border-muted-foreground/30 group-hover:border-muted-foreground/60 flex items-center justify-center transition-all duration-200 animate-bounce">
+              <ChevronDown className="h-3.5 w-3.5" />
+            </div>
+          </button>
         </div>
       </div>
     </section>
@@ -343,7 +361,7 @@ function MovieReviewDialog({
     <Dialog open={movie !== null} onOpenChange={(open) => !open && onClose()}>
       <DialogContent
         data-ocid="movies.dialog"
-        className="max-w-xl w-full p-0 overflow-hidden rounded-sm gap-0"
+        className="max-w-xl w-full p-0 overflow-hidden rounded-sm gap-0 bg-white"
       >
         {/* Close button */}
         <button
@@ -401,17 +419,30 @@ function MovieReviewDialog({
               </div>
             </div>
 
-            {/* Body */}
-            <ScrollArea className="max-h-[50vh]">
-              <div className="px-8 py-7">
-                <p className="text-foreground leading-relaxed text-base">
-                  {movie.review}
-                </p>
+            {/* Body — plain div with visible native scrollbar */}
+            <div className="relative">
+              <div
+                className="px-8 py-7"
+                style={{
+                  maxHeight: "55vh",
+                  overflowY: "scroll",
+                  scrollbarWidth: "auto",
+                  scrollbarColor: "#888 #e5e7eb",
+                }}
+              >
+                {movie.review.split("\n\n").map((paragraph) => (
+                  <p
+                    key={paragraph.slice(0, 20)}
+                    className="text-foreground leading-relaxed text-base mb-4 last:mb-0"
+                  >
+                    {paragraph}
+                  </p>
+                ))}
 
                 {movie.directorNote && (
                   <div className="mt-6 border-l-2 border-primary pl-4">
                     <p className="text-xs font-medium tracking-widest uppercase text-primary mb-1">
-                      Director's Note
+                      Director&apos;s Note
                     </p>
                     <p className="text-sm text-muted-foreground italic">
                       {movie.directorNote}
@@ -419,7 +450,15 @@ function MovieReviewDialog({
                   </div>
                 )}
               </div>
-            </ScrollArea>
+              {/* Gradient fade hint — signals more content below */}
+              <div
+                className="pointer-events-none absolute bottom-0 left-0 right-0 h-10"
+                style={{
+                  background:
+                    "linear-gradient(to bottom, transparent, rgba(255,255,255,0.92))",
+                }}
+              />
+            </div>
           </>
         )}
       </DialogContent>
