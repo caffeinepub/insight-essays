@@ -131,6 +131,15 @@ function Navbar() {
               {item.label}
             </button>
           ))}
+          <button
+            type="button"
+            data-ocid="nav.contact.link"
+            onClick={() => scrollTo("contact")}
+            className="flex items-center gap-1.5 px-3 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/60 rounded-sm transition-all duration-150"
+          >
+            <Mail className="h-3.5 w-3.5" />
+            Contact
+          </button>
         </nav>
 
         <div className="flex items-center gap-3">
@@ -178,6 +187,14 @@ function Navbar() {
               {item.label}
             </button>
           ))}
+          <button
+            type="button"
+            onClick={() => scrollTo("contact")}
+            className="flex items-center gap-2 px-3 py-3 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted/60 rounded-sm transition-all duration-150 text-left"
+          >
+            <Mail className="h-4 w-4" />
+            Contact
+          </button>
         </div>
       )}
     </header>
@@ -556,6 +573,65 @@ function NewsletterSection() {
   );
 }
 
+function ContactSection() {
+  const ref = useFadeIn();
+
+  return (
+    <section id="contact" className="py-24 sm:py-32" ref={ref}>
+      <div className="container mx-auto max-w-3xl px-6">
+        {/* Section header */}
+        <div className="fade-in mb-16 text-center">
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <Mail className="h-4 w-4 text-primary" />
+            <p className="text-xs font-medium tracking-[0.2em] uppercase text-primary">
+              Get in Touch
+            </p>
+          </div>
+          <h2 className="font-display text-4xl sm:text-5xl font-semibold tracking-tight text-foreground mb-4">
+            Contact & Inquiries
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-md mx-auto">
+            Have a thought, a disagreement, or just want to say hello? I read
+            every message.
+          </p>
+        </div>
+
+        {/* Contact card */}
+        <div className="fade-in fade-in-delay-1 relative border border-border rounded-sm p-10 sm:p-14 text-center overflow-hidden group hover:-translate-y-0.5 transition-transform duration-200">
+          {/* Subtle ambient glow on hover */}
+          <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none bg-gradient-to-br from-primary/[0.03] to-transparent" />
+
+          {/* Icon */}
+          <div className="w-16 h-16 rounded-full border border-border flex items-center justify-center mx-auto mb-8 bg-muted/30 group-hover:border-primary/40 transition-colors duration-200">
+            <Mail className="h-7 w-7 text-muted-foreground group-hover:text-primary transition-colors duration-200" />
+          </div>
+
+          <p className="text-sm font-medium tracking-widest uppercase text-muted-foreground mb-4">
+            Send a message
+          </p>
+
+          <a
+            href="mailto:dakshesh236@gmail.com"
+            data-ocid="contact.link"
+            className="font-display text-2xl sm:text-3xl font-semibold text-foreground hover:text-primary transition-colors duration-150 inline-flex items-center gap-3 group/link"
+          >
+            dakshesh236@gmail.com
+            <ArrowRight className="h-5 w-5 opacity-0 group-hover/link:opacity-100 group-hover/link:translate-x-1 transition-all duration-150" />
+          </a>
+
+          <div className="mt-8 flex items-center justify-center gap-4">
+            <div className="h-px flex-1 max-w-16 bg-border" />
+            <p className="text-xs text-muted-foreground/60 tracking-wide">
+              Replies within a day or two
+            </p>
+            <div className="h-px flex-1 max-w-16 bg-border" />
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Footer() {
   const navLinks = [
     { label: "Movies", id: "movies" },
@@ -565,6 +641,7 @@ function Footer() {
     { label: "Resources", id: "resources" },
     { label: "About", id: "about" },
     { label: "Newsletter", id: "newsletter" },
+    { label: "Contact", id: "contact" },
   ];
 
   const scrollTo = (id: string) => {
@@ -687,6 +764,7 @@ export default function App() {
         />
         <AboutSection />
         <NewsletterSection />
+        <ContactSection />
       </main>
       <Footer />
     </div>
